@@ -1,0 +1,79 @@
+:root {
+    --bg: #0a0a0c;
+    --neon-blue: #00f2ff;
+    --card-bg: #16161a;
+}
+
+body {
+    background: var(--bg);
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(0, 242, 255, 0.1);
+    width: 400px;
+    text-align: center;
+}
+
+/* O CÍRCULO AZUL MÁGICO */
+#status-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin: 10px auto;
+    transition: 0.3s;
+}
+
+.idle {
+    background: #444;
+    box-shadow: none;
+}
+
+.processing {
+    background: var(--neon-blue);
+    box-shadow: 0 0 15px var(--neon-blue);
+    animation: pulse 0.8s infinite alternate;
+}
+
+@keyframes pulse {
+    from { opacity: 0.4; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1.2); }
+}
+
+.display-area {
+    background: #000;
+    padding: 15px;
+    border-radius: 10px;
+    min-height: 100px;
+    margin: 20px 0;
+    border-left: 4px solid var(--neon-blue);
+}
+
+input {
+    background: #222;
+    border: none;
+    padding: 10px;
+    color: white;
+    width: 70%;
+    border-radius: 5px;
+}
+
+button {
+    background: var(--neon-blue);
+    border: none;
+    padding: 10px 15px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover { transform: scale(1.05); }
