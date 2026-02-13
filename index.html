@@ -1,24 +1,95 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CORE IA v5.0 PRO</title>
     <style>
-        :root { --primary: #00f2fe; --bg: #0a0c10; --card: #161b22; --text: #e6edf3; --border: #30363d; }
-        body { background-color: var(--bg); color: var(--text); font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { background: var(--card); padding: 2.5rem; border-radius: 16px; width: 450px; border: 1px solid var(--border); text-align: center; }
-        .logo-area { margin-bottom: 2rem; }
-        h1 { font-size: 1.3rem; letter-spacing: 3px; color: var(--primary); }
-        input { width: 100%; padding: 16px; border-radius: 10px; border: 1px solid var(--border); background: #0d1117; color: white; margin-bottom: 1rem; box-sizing: border-box; }
-        button { width: 100%; padding: 16px; border-radius: 10px; background: var(--primary); color: #0a0c10; font-weight: bold; cursor: pointer; border: none; }
-        #output { margin-top: 1.5rem; padding: 15px; background: #0d1117; border-radius: 10px; border-left: 4px solid var(--primary); min-height: 50px; text-align: left; word-wrap: break-word; }
-        img { width: 100%; border-radius: 8px; margin-top: 10px; }
+        :root {
+            --primary: #00f2fe;
+            --bg: #0a0c10;
+            --card: #161b22;
+            --text: #e6edf3;
+            --border: #30363d;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: var(--card);
+            padding: 2.5rem;
+            border-radius: 16px;
+            width: 450px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .logo-area {
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 1.3rem;
+            letter-spacing: 3px;
+            color: var(--primary);
+        }
+
+        input {
+            width: 100%;
+            padding: 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: #0d1117;
+            color: white;
+            margin-bottom: 1rem;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            border-radius: 10px;
+            background: var(--primary);
+            color: #0a0c10;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+        }
+
+        #output {
+            margin-top: 1.5rem;
+            padding: 15px;
+            background: #0d1117;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+            min-height: 50px;
+            text-align: left;
+            word-wrap: break-word;
+        }
+
+        img {
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <div class="logo-area"><h1>CORE IA v5.0 PRO</h1></div>
+        <div class="logo-area">
+            <h1>CORE IA v5.0 PRO</h1>
+        </div>
         <input type="text" id="user-input" placeholder="Digite seu comando...">
         <button onclick="enviar()">Executar Protocolo</button>
         <div id="output">Sistema online. Aguardando...</div>
@@ -33,13 +104,14 @@
             output.innerText = "Processando...";
 
             try {
-                const response = await fetch('http://127.0.0.1:5000/gerar', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                // COLOQUE O LINK DO RENDER:
+                const resposta = await fetch("https://seu-link-do-render.onrender.com/gerar", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ prompt: input.value })
-                });
+                })
 
-                const data = await response.json();
+                const data = await resposta.json();
 
                 if (data.imagem) {
                     output.innerHTML = `<img src="data:image/png;base64,${data.imagem}" />`;
@@ -55,4 +127,5 @@
         }
     </script>
 </body>
+
 </html>
