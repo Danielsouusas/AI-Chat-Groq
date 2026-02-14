@@ -1,130 +1,38 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+from groq import Groq
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CORE IA v5.0 PRO</title>
-    <style>
-        :root {
-            --primary: #00f2fe;
-            --bg: #0a0c10;
-            --card: #161b22;
-            --text: #e6edf3;
-            --border: #30363d;
-        }
+app = Flask(name)
+CORS(app, resources={r"/": {"origins": ""}})
 
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-        }
+client = Groq(api_key="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")
 
-        .container {
-            background: var(--card);
-            padding: 2.5rem;
-            border-radius: 16px;
-            width: 450px;
-            border: 1px solid var(--border);
-            text-align: center;
-        }
+@app.after_request
+def add_header(response):
+response.headers['Access-Control-Allow-Origin'] = '*'
+response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization'
+response.headers['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE,OPTIONS'
+return response
 
-        .logo-area {
-            margin-bottom: 2rem;
-        }
+@app.route('/')
+def home():
+return "Servidor CORE IA online! 🚀"
 
-        h1 {
-            font-size: 1.3rem;
-            letter-spacing: 3px;
-            color: var(--primary);
-        }
+@app.route('/gerar', methods=['POST', 'OPTIONS'])
+def gerar():
+if request.method == 'OPTIONS':
+return jsonify({"status": "ok"}), 200
+try:
+data = request.json
+pergunta = data.get("prompt", "")
+completion = client.chat.completions.create(
+model="llama-3.3-70b-versatile",
+messages=[{"role": "user", "content": pergunta}],
+)
+resposta = completion.choices[0].message.content
+return jsonify({"resultado": resposta})
+except Exception as e:
+return jsonify({"erro": str(e)}), 500
 
-        input {
-            width: 100%;
-            padding: 16px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            background: #0d1117;
-            color: white;
-            margin-bottom: 1rem;
-            box-sizing: border-box;
-        }
-
-        button {
-            width: 100%;
-            padding: 16px;
-            border-radius: 10px;
-            background: var(--primary);
-            color: #0a0c10;
-            font-weight: bold;
-            cursor: pointer;
-            border: none;
-        }
-
-        #output {
-            margin-top: 1.5rem;
-            padding: 15px;
-            background: #0d1117;
-            border-radius: 10px;
-            border-left: 4px solid var(--primary);
-            min-height: 50px;
-            text-align: left;
-            word-wrap: break-word;
-        }
-
-        img {
-            width: 100%;
-            border-radius: 8px;
-            margin-top: 10px;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container">
-        <div class="logo-area">
-            <h1>CORE IA v5.0 PRO</h1>
-        </div>
-        <input type="text" id="user-input" placeholder="Digite seu comando...">
-        <button onclick="enviar()">Executar Protocolo</button>
-        <div id="output">Sistema online. Aguardando...</div>
-    </div>
-
-    <script>
-        async function enviar() {
-            const input = document.getElementById('user-input');
-            const output = document.getElementById('output');
-
-            if (!input.value.trim()) return;
-
-            output.innerText = "Processando...";
-
-            try {
-                const resposta = await fetch("", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ prompt: input.value })
-                });
-
-                const data = await resposta.json();
-
-                if (data.resultado) {
-                    output.innerText = data.resultado;
-                } else {
-                    output.innerText = "Erro: " + (data.erro || "Falha na resposta");
-                }
-            } catch (err) {
-                output.innerText = "Falha ao conectar. Verifique o link!";
-            }
-
-            input.value = "";
-        }
-    </script>
-</body>
-
-</html>
+if __name__ == '__main__':
+app.run(host='0.0.0.0', port=5000)
