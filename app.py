@@ -6,7 +6,7 @@ app = Flask(__name__)
 CORS(app)
 
 # 🔑 COLOQUE SUA CHAVE DA GROQ AQUI ABAIXO
-client = Groq(api_key="")
+client = Groq(api_key="AIzaSyAALYb1BcmaU6QsV3w-duFSJ2SWqHwxgIs")
 
 @app.route('/gerar', methods=['POST'])
 def gerar():

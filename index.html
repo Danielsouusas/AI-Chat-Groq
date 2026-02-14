@@ -105,7 +105,7 @@
 
             try {
                 // COLOQUE O LINK DO RENDER:
-                const resposta = await fetch("https://seu-link-do-render.onrender.com/gerar", {
+                const resposta = await fetch("https://ai-chat-groq.vercel.app/gerar", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ prompt: input.value })
