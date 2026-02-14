@@ -99,33 +99,31 @@
         async function enviar() {
             const input = document.getElementById('user-input');
             const output = document.getElementById('output');
+
             if (!input.value.trim()) return;
 
-        }
+            output.innerText = "Processando...";
 
-        output.innerText = "Processando...";
+            try {
+                const resposta = await fetch("", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ prompt: input.value })
+                });
 
-        try {
-            // COLOQUE O LINK DO RENDER:
-            const resposta = await fetch("https://ai-chat-groq-wine.vercel.app/gerar", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ prompt: input.value })
-            })
+                const data = await resposta.json();
 
-            const data = await resposta.json();
-
-            if (data.imagem) {
-                output.innerHTML = `<img src="data:image/png;base64,${data.imagem}" />`;
-            } else if (data.resultado) {
-                output.innerText = data.resultado;
-            } else {
-                output.innerText = "Erro: " + data.erro;
+                if (data.resultado) {
+                    output.innerText = data.resultado;
+                } else {
+                    output.innerText = "Erro: " + (data.erro || "Falha na resposta");
+                }
+            } catch (err) {
+                output.innerText = "Falha ao conectar. Verifique o link!";
             }
-        } catch (err) {
-            output.innerText = "Falha ao conectar com o servidor.";
+
+            input.value = "";
         }
-        input.value = "";
     </script>
 </body>
 
