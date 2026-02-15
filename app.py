@@ -3,30 +3,29 @@ from flask_cors import CORS
 from groq import Groq
 import os
 
-# Correção: __name__ com dois underscores
+# CORREÇÃO: __name__ com dois underscores é o padrão Flask
 app = Flask(__name__)
 
-# Configuração simplificada e funcional do CORS
-CORS(app, resources={r"/*": {"origins": "*"}}) 
+# CORREÇÃO: Liberando o CORS corretamente para o seu HTML conseguir acessar
+CORS(app, resources={r"/*": {"origins": "*"}})
 
-# Recomendado: Colocar a chave em variável de ambiente, mas mantendo a sua por ora
+# Sua chave Groq
 client = Groq(api_key="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")
 
 @app.route('/')
 def home():
-    return "Servidor CORE IA online! 🚀"
+    return "<h1>Servidor CORE IA online! 🚀</h1>"
 
 @app.route('/gerar', methods=['POST', 'OPTIONS'])
 def gerar():
-    # O Flask-CORS já cuida do OPTIONS automaticamente, 
-    # mas manteremos sua lógica para garantir.
+    # O CORS precisa que o método OPTIONS responda 200 OK
     if request.method == 'OPTIONS':
         return jsonify({"status": "ok"}), 200
         
     try:
-        data = request.json
+        data = request.get_json()
         if not data:
-            return jsonify({"erro": "JSON não enviado"}), 400
+            return jsonify({"erro": "JSON inválido"}), 400
             
         pergunta = data.get("prompt", "")
         
@@ -37,10 +36,11 @@ def gerar():
         
         resposta = completion.choices[0].message.content
         return jsonify({"resultado": resposta})
+        
     except Exception as e:
-        print(f"Erro no servidor: {e}")
+        print(f"Erro: {e}")
         return jsonify({"erro": str(e)}), 500
 
-# Necessário para rodar localmente, a Vercel usa o objeto 'app'
+# CORREÇÃO: O parâmetro correto é 'port', não 'porta'
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
